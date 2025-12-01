@@ -14,21 +14,71 @@ INATURALIST_API_BASE = "https://api.inaturalist.org/v1/taxa"
 CACHE_TTL = 3600  # Cache validity: 1 hour (seconds)
 MAX_PHOTOS = 3    # Maximum number of photos to fetch
 
-# AI Zoo Curator Prompt (Core Role Definition)
-CURATOR_PROMPT_TEMPLATE = """
+# 多角色风格提示词模板（核心新增）
+CURATOR_PROMPT_TEMPLATES = {
+    "general": """
 You are a senior curator with 30 years of experience in a world-class zoo, 
-skilled at explaining animal knowledge to visitors of all ages in vivid, accessible language.
+skilled at explaining animal knowledge to general visitors in vivid, accessible language.
 Based on the following animal data, generate a complete, engaging explanation that includes:
 1. A warm opening greeting to attract attention (e.g., "Welcome to the XX exhibit, everyone!");
 2. Core content: Common name / English name / Scientific name + Physical characteristics + 
    Lifestyle (diet, habitat, behavior) + Geographic distribution + Conservation status;
 3. 1-2 fun trivia facts (e.g., unique survival skills, origin of common nicknames);
 4. A conservation initiative at the end to promote ecological protection awareness;
-5. Friendly and colloquial tone, avoid academic jargon, with clear paragraphs for easy reading.
+5. Friendly and colloquial tone, avoid excessive academic jargon, clear paragraphs for easy reading.
+
+Animal Data:
+{animal_data}
+""",
+    "kids": """
+You are a zoo curator specialized in educating children (ages 6-12), with a playful, energetic tone.
+Based on the following animal data, generate a kid-friendly explanation that includes:
+1. A cheerful, exciting opening (e.g., "Hey little explorers! Let's meet the amazing XX!");
+2. Core content: Simple descriptions of appearance (cute/fun features), diet (favorite foods), 
+   interesting behaviors (funny habits, unique skills) + basic habitat information;
+3. 2-3 fun, surprising trivia facts (e.g., "Did you know? This animal can...!");
+4. A simple, actionable conservation message (e.g., "Let's help protect their homes by...");
+5. Use short sentences, exclamation points appropriately, avoid complex words, add emoji-like language.
+
+Animal Data:
+{animal_data}
+""",
+    "biologist": """
+You are a senior zoo curator with a background in wildlife biology, speaking to professional biologists/students.
+Based on the following animal data, generate a technical, detailed explanation that includes:
+1. A concise opening introducing the species' ecological significance;
+2. Core content: Complete taxonomic classification + detailed morphological characteristics + 
+   ecological niche (dietary strategy, habitat specificity, interspecies interactions) + 
+   population dynamics + conservation status (with IUCN category if available) + genetic relatedness;
+3. Latest research findings or taxonomic updates (if relevant);
+4. Conservation challenges and scientific management strategies;
+5. Academic but accessible tone, use standard biological terminology, provide precise data where possible.
+
+Animal Data:
+{animal_data}
+""",
+    "tourist_guide": """
+You are an experienced zoo tour guide, speaking to casual tourists seeking an engaging, memorable experience.
+Based on the following animal data, generate a lively, story-driven explanation that includes:
+1. An inviting opening that builds curiosity (e.g., "Keep your eyes peeled—you're about to meet one of our most fascinating residents!");
+2. Core content: Highlight the most striking/unique features + interesting behavioral anecdotes + 
+   cultural significance or folklore (if relevant) + best viewing tips (what to look for);
+3. 1-2 surprising "did you know" facts to impress visitors;
+4. A heartfelt conservation message that connects to visitors' experience;
+5. Conversational tone, use storytelling elements, keep it engaging but not too technical.
 
 Animal Data:
 {animal_data}
 """
+}
+
+# 角色风格说明（用于UI展示）
+ROLE_DESCRIPTIONS = {
+    "general": "General Visitors (Friendly & Balanced) - Suitable for all ages, mix of fun and information",
+    "kids": "Children (Playful & Simple) - Age 6-12, fun facts and easy-to-understand language",
+    "biologist": "Biologists/Students (Technical & Detailed) - Professional terminology and in-depth data",
+    "tourist_guide": "Casual Tourists (Engaging & Story-driven) - Memorable stories and viewing tips"
+}
 
 # ---------------------- Utility Functions ----------------------
 @st.cache_data(ttl=CACHE_TTL, show_spinner="Fetching authoritative biodiversity data...")
@@ -154,18 +204,20 @@ def init_ai_client(api_key: str) -> Optional[OpenAI]:
         st.error(f"❌ Failed to initialize AI client: {str(e)}")
         return None
 
-def generate_curator_explanation(animal_data: Dict, api_key: str) -> Optional[str]:
+def generate_curator_explanation(animal_data: Dict, api_key: str, selected_role: str) -> Optional[str]:
     """
-    Generate zoo curator-style explanation via AI
+    Generate zoo curator-style explanation via AI with selected role
     :param animal_data: Merged animal data
     :param api_key: OpenAI API Key
+    :param selected_role: Selected explanation style (general/kids/biologist/tourist_guide)
     :return: Generated explanation text, None if failed
     """
     client = init_ai_client(api_key)
     if not client:
         return None
 
-    prompt = CURATOR_PROMPT_TEMPLATE.format(
+    # Get corresponding prompt template based on selected role
+    prompt = CURATOR_PROMPT_TEMPLATES[selected_role].format(
         animal_data=json.dumps(animal_data, ensure_ascii=False, indent=2)
     )
 
@@ -173,8 +225,8 @@ def generate_curator_explanation(animal_data: Dict, api_key: str) -> Optional[st
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,  # Control language vividness (0=rigid, 1=creative)
-            max_tokens=1200,
+            temperature=0.7 if selected_role != "biologist" else 0.3,  # 科学家风格更严谨，降低随机性
+            max_tokens=1500 if selected_role == "biologist" else 1200,  # 科学家风格内容更详细，增加 tokens
             timeout=20
         )
         return response.choices[0].message.content.strip()
@@ -203,7 +255,7 @@ def main():
     st.subheader("—— Intelligent Science Explanations Based on Global Biodiversity Data", divider="orange")
     st.markdown("""
     🔍 Integrates GBIF global biodiversity data & iNaturalist citizen science records  
-    🤖 Senior curator-style explanations with fun trivia & conservation messages  
+    🎭 Multiple curator styles for different audiences (Kids / Biologists / Tourists)  
     📸 Massive real photos, support search by name & region
     """)
 
@@ -218,6 +270,17 @@ def main():
             placeholder="sk-xxx...",
             help="Get API Key: https://platform.openai.com/api-keys"
         )
+        
+        # 新增：角色风格选择
+        st.header("🎭 Curator Style", divider="blue")
+        selected_role = st.selectbox(
+            "Select Audience Style",
+            options=list(CURATOR_PROMPT_TEMPLATES.keys()),
+            format_func=lambda x: x.replace("_", " ").title(),
+            index=0  # 默认选择 general
+        )
+        # 显示角色风格说明
+        st.caption(f"ℹ️ {ROLE_DESCRIPTIONS[selected_role]}")
         
         st.header("🔍 Filter Options", divider="blue")
         # Region Selection (Country Code Mapping)
@@ -263,21 +326,20 @@ def main():
 
     # Process Search/Example Click
     if search_btn and search_name:
-        process_animal_query(search_name, region, api_key, col1, col2)
+        process_animal_query(search_name, region, api_key, selected_role, col1, col2)
     elif "selected_example" in st.session_state:
         selected_species = st.session_state["selected_example"]
-        process_animal_query(selected_species, "", api_key, col1, col2)
+        process_animal_query(selected_species, "", api_key, selected_role, col1, col2)
 
     # Footer Information
     st.divider()
     st.caption("""
     📊 Data Sources: GBIF API | iNaturalist API  
     🤖 AI Model: OpenAI GPT-3.5 Turbo (Supports Claude/Gemini replacement)  
-    ⚠️ For educational purposes only. Data subject to official updates.
     """)
 
-def process_animal_query(species_name: str, region: str, api_key: str, col1, col2):
-    """Process animal search query and display results"""
+def process_animal_query(species_name: str, region: str, api_key: str, selected_role: str, col1, col2):
+    """Process animal search query and display results with selected role style"""
     with st.spinner(f"Searching for {species_name}..."):
         # 1. Fetch data from both APIs
         gbif_data = fetch_gbif_data(species_name, region)
@@ -292,8 +354,8 @@ def process_animal_query(species_name: str, region: str, api_key: str, col1, col
             st.markdown("3. Check spelling")
             return
 
-        # 3. Generate AI explanation
-        explanation = generate_curator_explanation(animal_data, api_key) if api_key else None
+        # 3. Generate AI explanation with selected role
+        explanation = generate_curator_explanation(animal_data, api_key, selected_role) if api_key else None
 
         # 4. Left Column: Images + Basic Info
         with col1:
@@ -329,9 +391,12 @@ def process_animal_query(species_name: str, region: str, api_key: str, col1, col
             for rank, value in animal_data["classification"].items():
                 st.markdown(f"**{rank}**：{value}")
 
-        # 5. Right Column: AI Curator Explanation
+        # 5. Right Column: AI Curator Explanation (with role indicator)
         with col2:
-            st.subheader("🎤 Curator's Live Explanation", divider="blue")
+            # 显示当前选择的角色风格
+            role_display_name = selected_role.replace("_", " ").title()
+            st.subheader(f"🎤 Curator's Explanation (For {role_display_name})", divider="blue")
+            
             if explanation:
                 st.markdown(f"<div style='font-size: 17px; line-height: 1.8;'>{explanation}</div>", unsafe_allow_html=True)
             else:
