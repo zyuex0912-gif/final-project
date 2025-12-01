@@ -14,7 +14,7 @@ INATURALIST_API_BASE = "https://api.inaturalist.org/v1/taxa"
 CACHE_TTL = 3600  # Cache validity: 1 hour (seconds)
 MAX_PHOTOS = 3    # Maximum number of photos to fetch
 
-# 多角色风格提示词模板（核心新增）
+# 多角色风格提示词模板
 CURATOR_PROMPT_TEMPLATES = {
     "general": """
 You are a senior curator with 30 years of experience in a world-class zoo, 
@@ -78,6 +78,82 @@ ROLE_DESCRIPTIONS = {
     "kids": "Children (Playful & Simple) - Age 6-12, fun facts and easy-to-understand language",
     "biologist": "Biologists/Students (Technical & Detailed) - Professional terminology and in-depth data",
     "tourist_guide": "Casual Tourists (Engaging & Story-driven) - Memorable stories and viewing tips"
+}
+
+# 大熊猫默认数据（无需API调用，初始界面直接展示）
+GIANT_PANDA_DEFAULT_DATA = {
+    "common_name": "Giant Panda",
+    "chinese_name": "大熊猫",
+    "english_name": "Giant Panda",
+    "scientific_name": "Ailuropoda melanoleuca",
+    "classification": {
+        "Kingdom": "Animalia",
+        "Phylum": "Chordata",
+        "Class": "Mammalia",
+        "Order": "Carnivora",
+        "Family": "Ursidae",
+        "Genus": "Ailuropoda"
+    },
+    "distribution": ["China"],
+    "conservation_status": "Vulnerable (VU)",
+    "habitat": "Temperate broadleaf and mixed forests with dense bamboo stands, primarily in Sichuan, Shaanxi, and Gansu provinces of China",
+    "behavior": "Primarily herbivorous (99% bamboo diet), solitary except during breeding season, excellent climbers, spend 10-16 hours daily feeding",
+    "photos": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Grosser_Panda.JPG/1200px-Grosser_Panda.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Panda_%2828908900398%29.jpg/1200px-Panda_%2828908900398%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Giant_Panda_%28Ailuropoda_melanoleuca%29.jpg/1200px-Giant_Panda_%28Ailuropoda_melanoleuca%29.jpg"
+    ],
+    "observations_count": 158000,
+    "default_explanation": {
+        "general": """
+Welcome to the Giant Panda exhibit, everyone! It's a pleasure to introduce you to one of the world's most beloved and iconic animals—the Giant Panda (Ailuropoda melanoleuca)!
+
+These fluffy black-and-white mammals are instantly recognizable with their round faces, black patches around their eyes, and stocky bodies. Despite being classified as carnivores, pandas have evolved to be almost exclusively herbivorous, with bamboo making up 99% of their diet. They can eat up to 12-38 kilograms of bamboo per day, spending 10-16 hours feeding to meet their energy needs!
+
+In the wild, giant pandas are found only in the mountainous regions of central China, primarily in Sichuan, Shaanxi, and Gansu provinces. They inhabit temperate broadleaf and mixed forests with dense bamboo stands, which provide both food and shelter. Once endangered, their conservation status has improved to "Vulnerable" thanks to extensive protection efforts, including habitat preservation and captive breeding programs.
+
+Fun trivia: Did you know that pandas have a specialized sixth finger (a modified wrist bone) that acts like an opposable thumb? This unique adaptation helps them grasp bamboo stalks with precision! Another interesting fact—pandas have a very low metabolic rate, similar to sloths, which is why they move slowly and sleep for much of the day.
+
+As we admire these amazing creatures, let's remember the importance of protecting their natural habitats. Deforestation and habitat fragmentation remain threats to their survival. By supporting conservation initiatives and sustainable practices, we can ensure that giant pandas continue to thrive for generations to come. Enjoy your time watching these gentle giants!
+        """,
+        "kids": """
+Hey little explorers! Let's meet the amazing Giant Panda—one of the cutest and most famous animals on Earth! 🐼
+
+Look at their fluffy black-and-white fur! They have big round faces, black "eye masks" that make them look like little superheroes, and chubby bodies that waddle when they walk—so adorable! Pandas love bamboo more than anything else—they eat it for breakfast, lunch, and dinner! They munch on 12-38 kilograms of bamboo every day—that's like eating 100 bowls of rice! Yum!
+
+Pandas live in the mountains of China, in forests where there are lots of bamboo plants. They're great climbers and can even climb trees when they want to take a nap or escape from trouble. Unlike other bears, pandas don't hibernate—they just move to warmer areas in the winter.
+
+Did you know? 🤯 Pandas have a secret "extra finger"! It's not a real finger, but a special bone in their wrist that helps them hold bamboo like we hold a pencil. And baby pandas are called cubs—they're only about the size of a stick of butter when they're born, and they're pink and hairless! How cool is that?
+
+Let's help protect pandas! We can do simple things like saving paper (since paper comes from trees) and supporting zoos that help breed pandas. Every little bit helps these cute creatures keep their homes safe. Now, let's watch them munch bamboo—they're so good at it!
+        """,
+        "biologist": """
+The Giant Panda (Ailuropoda melanoleuca) holds significant ecological and taxonomic importance as a member of the Ursidae family, representing a unique lineage within the Carnivora order. This species exhibits distinct morphological, behavioral, and physiological adaptations that make it a focal point of evolutionary biology research.
+
+Taxonomically, Ailuropoda melanoleuca is classified under Kingdom Animalia, Phylum Chordata, Class Mammalia, Order Carnivora, Family Ursidae, and Genus Ailuropoda. Phylogenetic studies indicate that pandas diverged from other bear species approximately 19-24 million years ago, with genetic analyses supporting their placement within the bear family rather than a separate family (Ailuropodidae).
+
+Morphologically, pandas display several specialized adaptations for their bamboo-dominated diet: a modified radial sesamoid bone (the "sixth finger") for grasping bamboo, robust jaw muscles and molar teeth for chewing tough plant material, and a reduced digestive tract (relative to other herbivores) despite their herbivorous diet. Their digestive system retains carnivorous characteristics, with low efficiency in cellulose digestion—compensated by high intake volumes (12-38 kg/day of bamboo).
+
+Ecologically, pandas occupy a narrow niche in temperate broadleaf and mixed forests at elevations of 1,200-3,400 meters in central China. Their distribution is limited to fragmented habitats in Sichuan, Shaanxi, and Gansu provinces, with an estimated wild population of 1,864 individuals (2021 census). The species is classified as Vulnerable (VU) by the IUCN Red List, with primary threats including habitat fragmentation, climate change-induced bamboo die-offs, and human-wildlife conflict.
+
+Population management strategies include habitat connectivity projects (e.g., the Giant Panda National Park, established in 2020), captive breeding programs with a success rate of ~80% in major facilities, and genetic monitoring to maintain genetic diversity. Recent research has focused on the species' gut microbiome adaptation to bamboo digestion and the impact of climate change on bamboo phenology.
+
+Conservation challenges persist, particularly regarding habitat fragmentation and the long-term sustainability of bamboo forests. Continued scientific research, habitat protection, and community engagement are critical for the species' long-term survival.
+        """,
+        "tourist_guide": """
+Keep your eyes peeled—you're about to meet one of our most fascinating residents: the Giant Panda! These gentle giants are not just cute—they're living symbols of conservation success and cultural heritage.
+
+As you watch them munch bamboo, notice their iconic black-and-white markings—each panda's pattern is unique, like a fingerprint! Those black patches around their eyes aren't just for show—scientists think they help reduce glare from the sun and may also serve as a form of communication. And that waddling walk? It's due to their short legs and stocky build, which are perfect for climbing trees but make walking on the ground a little comical.
+
+Pandas have deep cultural significance in China, where they're considered a national treasure and a symbol of peace. For centuries, they've been featured in art, literature, and folklore. But beyond their cultural importance, they're also ecological indicators—their presence means the forest ecosystem is healthy.
+
+Pro tip: Look closely at how they hold the bamboo—they use their "sixth finger" to grip stalks with amazing precision. If you're lucky, you might see them do a little somersault or climb a tree—they're surprisingly agile for their size! And don't worry if they seem lazy—pandas sleep up to 14 hours a day to conserve energy from their low-nutrient bamboo diet.
+
+Did you know that pandas were once endangered? Thanks to decades of conservation efforts, their population has grown, and they're now classified as Vulnerable. But their habitat is still under threat, so every time we support conservation, we're helping these amazing animals thrive.
+
+Take a moment to appreciate these gentle giants—they're a reminder of how human action can make a positive difference. Enjoy the view, and feel free to ask if you have any questions!
+        """
+    }
 }
 
 # ---------------------- Utility Functions ----------------------
@@ -178,6 +254,7 @@ def merge_animal_data(gbif_data: Dict, inat_data: Dict) -> Optional[Dict]:
             inat_data.get("common_name") or
             "Unknown common name"
         ),
+        "chinese_name": gbif_data.get("vernacularName") or "Unknown Chinese name",
         "english_name": gbif_data.get("englishName", "Unknown English name"),
         "scientific_name": gbif_data.get("scientificName", "Unknown scientific name"),
         "classification": {
@@ -212,6 +289,10 @@ def generate_curator_explanation(animal_data: Dict, api_key: str, selected_role:
     :param selected_role: Selected explanation style (general/kids/biologist/tourist_guide)
     :return: Generated explanation text, None if failed
     """
+    # 若为大熊猫且未输入API Key，返回默认解说
+    if animal_data.get("scientific_name") == "Ailuropoda melanoleuca" and not api_key:
+        return GIANT_PANDA_DEFAULT_DATA["default_explanation"][selected_role].strip()
+    
     client = init_ai_client(api_key)
     if not client:
         return None
@@ -256,7 +337,8 @@ def main():
     st.markdown("""
     🔍 Integrates GBIF global biodiversity data & iNaturalist citizen science records  
     🎭 Multiple curator styles for different audiences (Kids / Biologists / Tourists)  
-    📸 Massive real photos, support search by name & region
+    📸 Massive real photos, support search by name & region  
+    🐼 Default display: Giant Panda (No API Key required!)
     """)
 
     # Sidebar Configuration
@@ -268,10 +350,10 @@ def main():
             "OpenAI API Key",
             type="password",
             placeholder="sk-xxx...",
-            help="Get API Key: https://platform.openai.com/api-keys"
+            help="Get API Key: https://platform.openai.com/api-keys (Required for non-panda animals)"
         )
         
-        # 新增：角色风格选择
+        # 角色风格选择
         st.header("🎭 Curator Style", divider="blue")
         selected_role = st.selectbox(
             "Select Audience Style",
@@ -300,18 +382,54 @@ def main():
         region = st.selectbox("Select Region", options=list(region_map.keys()), format_func=lambda x: region_map[x])
         
         # Animal Name Search
-        search_name = st.text_input("Enter Animal Name", placeholder="e.g., Giant Panda, African Elephant, Panthera tigris")
+        search_name = st.text_input("Enter Animal Name", placeholder="e.g., African Elephant, Siberian Tiger, Panthera tigris")
         search_btn = st.button("🔍 Search Animal", type="primary", use_container_width=True)
 
     # Main Content Layout (Left: Images & Info, Right: Explanation)
     col1, col2 = st.columns([1, 2], gap="large")
 
-    # Popular Animals Recommendation (Initial Page)
-    if not search_btn and not search_name:
+    # 初始页面：默认展示大熊猫（无需搜索）
+    if not search_btn and not search_name and "selected_example" not in st.session_state:
         st.divider()
-        st.subheader("🌟 Popular Animal Recommendations")
+        st.subheader("🐼 Featured Animal: Giant Panda")
         
-        example_species = ["Giant Panda", "African Elephant", "Siberian Tiger", "Blue Whale", "Giraffe", "Polar Bear"]
+        # 左侧：大熊猫基础信息
+        with col1:
+            st.subheader(f"🐾 {GIANT_PANDA_DEFAULT_DATA['common_name']} ({GIANT_PANDA_DEFAULT_DATA['chinese_name']})", divider="red")
+            st.caption(f"Scientific Name: {GIANT_PANDA_DEFAULT_DATA['scientific_name']}")
+            st.caption(f"English Name: {GIANT_PANDA_DEFAULT_DATA['english_name']}")
+
+            # 展示大熊猫实拍图片
+            for idx, photo in enumerate(GIANT_PANDA_DEFAULT_DATA["photos"]):
+                st.image(
+                    photo,
+                    use_column_width=True,
+                    caption=f"Real Photo {idx+1} (Giant Panda in China)"
+                )
+
+            # 基础信息卡片
+            st.divider()
+            st.info(f"🌍 Distribution: {', '.join(GIANT_PANDA_DEFAULT_DATA['distribution'])}")
+            st.info(f"🏕️ Habitat: {GIANT_PANDA_DEFAULT_DATA['habitat'][:100]}...")  # 截断长文本
+            st.info(f"🛡️ Conservation Status: {GIANT_PANDA_DEFAULT_DATA['conservation_status']}")
+            st.info(f"👀 Global Observations: {GIANT_PANDA_DEFAULT_DATA['observations_count']:,} records")
+
+            # 分类归属
+            st.divider()
+            st.subheader("📚 Taxonomy")
+            for rank, value in GIANT_PANDA_DEFAULT_DATA["classification"].items():
+                st.markdown(f"**{rank}**：{value}")
+
+        # 右侧：大熊猫默认解说（根据选择的角色）
+        with col2:
+            role_display_name = selected_role.replace("_", " ").title()
+            st.subheader(f"🎤 Curator's Explanation (For {role_display_name})", divider="blue")
+            st.markdown(f"<div style='font-size: 17px; line-height: 1.8;'>{GIANT_PANDA_DEFAULT_DATA['default_explanation'][selected_role]}</div>", unsafe_allow_html=True)
+        
+        # 热门动物推荐（默认展示大熊猫下方）
+        st.divider()
+        st.subheader("🌟 More Popular Animals")
+        example_species = ["African Elephant", "Siberian Tiger", "Blue Whale", "Giraffe", "Polar Bear"]
         example_cols = st.columns(len(example_species))
         
         for idx, species in enumerate(example_species):
@@ -324,8 +442,8 @@ def main():
                 if st.button(f"View Explanation", key=f"example_{species}", use_container_width=True):
                     st.session_state["selected_example"] = species
 
-    # Process Search/Example Click
-    if search_btn and search_name:
+    # 处理搜索/其他动物示例点击
+    elif search_btn and search_name:
         process_animal_query(search_name, region, api_key, selected_role, col1, col2)
     elif "selected_example" in st.session_state:
         selected_species = st.session_state["selected_example"]
@@ -334,42 +452,58 @@ def main():
     # Footer Information
     st.divider()
     st.caption("""
-    📊 Data Sources: GBIF API | iNaturalist API  
+    📊 Data Sources: GBIF API | iNaturalist API | Giant Panda default data (authoritative conservation records)  
     🤖 AI Model: OpenAI GPT-3.5 Turbo (Supports Claude/Gemini replacement)  
     """)
 
 def process_animal_query(species_name: str, region: str, api_key: str, selected_role: str, col1, col2):
     """Process animal search query and display results with selected role style"""
     with st.spinner(f"Searching for {species_name}..."):
-        # 1. Fetch data from both APIs
-        gbif_data = fetch_gbif_data(species_name, region)
-        inat_data = fetch_inaturalist_data(species_name)
-        
-        # 2. Merge data
-        animal_data = merge_animal_data(gbif_data, inat_data)
-        if not animal_data:
-            st.error(f"❌ No data found for {species_name}. Please try:")
-            st.markdown("1. Use a more precise name (e.g., scientific name)")
-            st.markdown("2. Remove region filter")
-            st.markdown("3. Check spelling")
-            return
+        # 特殊处理：如果搜索大熊猫，使用默认数据
+        if species_name.lower() in ["giant panda", "大熊猫", "ailuropoda melanoleuca"]:
+            animal_data = GIANT_PANDA_DEFAULT_DATA
+        else:
+            # 1. 获取双 API 数据
+            gbif_data = fetch_gbif_data(species_name, region)
+            inat_data = fetch_inaturalist_data(species_name)
+            
+            # 2. 合并数据
+            animal_data = merge_animal_data(gbif_data, inat_data)
+            if not animal_data:
+                st.error(f"❌ No data found for {species_name}. Please try:")
+                st.markdown("1. Use a more precise name (e.g., scientific name)")
+                st.markdown("2. Remove region filter")
+                st.markdown("3. Check spelling")
+                return
 
-        # 3. Generate AI explanation with selected role
-        explanation = generate_curator_explanation(animal_data, api_key, selected_role) if api_key else None
+        # 3. 生成 AI 解说（大熊猫无需API Key）
+        if animal_data.get("scientific_name") == "Ailuropoda melanoleuca":
+            explanation = animal_data["default_explanation"][selected_role].strip()
+        else:
+            if not api_key:
+                st.error("❌ API Key is required for non-panda animals. Please enter your OpenAI API Key in the sidebar.")
+                return
+            explanation = generate_curator_explanation(animal_data, api_key, selected_role)
+            if not explanation:
+                return
 
-        # 4. Left Column: Images + Basic Info
+        # 4. 左侧展示：图片 + 基础信息
         with col1:
-            st.subheader(f"🐾 {animal_data['common_name']}", divider="red")
+            chinese_name = animal_data.get("chinese_name", "")
+            if chinese_name and chinese_name != "Unknown Chinese name":
+                st.subheader(f"🐾 {animal_data['common_name']} ({chinese_name})", divider="red")
+            else:
+                st.subheader(f"🐾 {animal_data['common_name']}", divider="red")
             st.caption(f"Scientific Name: {animal_data['scientific_name']}")
             st.caption(f"English Name: {animal_data['english_name']}")
 
-            # Display photos
+            # 展示图片
             if animal_data["photos"]:
                 for idx, photo in enumerate(animal_data["photos"]):
                     st.image(
                         photo,
                         use_column_width=True,
-                        caption=f"Real Photo {idx+1} (from iNaturalist)"
+                        caption=f"Real Photo {idx+1} (from iNaturalist)" if "default_explanation" not in animal_data else f"Real Photo {idx+1} (Giant Panda in China)"
                     )
             else:
                 st.image(
@@ -378,22 +512,21 @@ def process_animal_query(species_name: str, region: str, api_key: str, selected_
                     caption="No Photos Available"
                 )
 
-            # Basic Info Cards
+            # 基础信息卡片
             st.divider()
             st.info(f"🌍 Distribution: {', '.join(animal_data['distribution'])}")
-            st.info(f"🏕️ Habitat: {animal_data['habitat']}")
+            st.info(f"🏕️ Habitat: {animal_data['habitat'][:100]}..." if len(animal_data['habitat']) > 100 else f"🏕️ Habitat: {animal_data['habitat']}")
             st.info(f"🛡️ Conservation Status: {animal_data['conservation_status']}")
             st.info(f"👀 Global Observations: {animal_data['observations_count']:,} records")
 
-            # Classification Info
+            # 分类信息
             st.divider()
             st.subheader("📚 Taxonomy")
             for rank, value in animal_data["classification"].items():
                 st.markdown(f"**{rank}**：{value}")
 
-        # 5. Right Column: AI Curator Explanation (with role indicator)
+        # 5. 右侧展示：AI 馆长解说
         with col2:
-            # 显示当前选择的角色风格
             role_display_name = selected_role.replace("_", " ").title()
             st.subheader(f"🎤 Curator's Explanation (For {role_display_name})", divider="blue")
             
