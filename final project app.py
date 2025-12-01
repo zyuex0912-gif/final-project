@@ -1,3 +1,11 @@
+"""
+AI 动物园馆长 Web 应用
+=====================
+功能：整合 GBIF + iNaturalist 开放 API 获取动物数据，通过 AI 扮演动物园馆长生成专业解说
+技术栈：Streamlit + Requests + OpenAI API
+数据来源：GBIF (全球生物多样性信息网络)、iNaturalist (公民科学项目)
+"""
+
 import streamlit as st
 import requests
 import json
@@ -198,7 +206,8 @@ def main():
 
     # 页面标题与简介
     st.title("🐅 AI 动物园馆长")
-    st.subheader("—— 基于全球真实生物数据的智能科普解说", divider="🐾")
+    # 修正：将 emoji 分隔符改为合法的颜色值（streamlit 支持的颜色：red/blue/green/orange/purple/brown/pink/grey/gray）
+    st.subheader("—— 基于全球真实生物数据的智能科普解说", divider="orange")
     st.markdown("""
     🔍 整合 GBIF 全球生物多样性数据与 iNaturalist 公民科学观测记录  
     🤖 资深馆长风格解说，带趣味冷知识与保护倡议  
@@ -293,6 +302,7 @@ def process_animal_query(species_name: str, region: str, api_key: str, col1, col
 
         # 4. 左侧展示：图片 + 基础信息
         with col1:
+            # 修正：将 emoji 分隔符改为合法颜色值
             st.subheader(f"🐾 {animal_data['chinese_name']}", divider="red")
             st.caption(f"学名：{animal_data['scientific_name']}")
             st.caption(f"英文名：{animal_data['english_name']}")
@@ -327,6 +337,7 @@ def process_animal_query(species_name: str, region: str, api_key: str, col1, col
 
         # 5. 右侧展示：AI 馆长解说
         with col2:
+            # 修正：将 emoji 分隔符改为合法颜色值
             st.subheader("🎤 馆长现场解说", divider="blue")
             if explanation:
                 st.markdown(f"<div style='font-size: 17px; line-height: 1.8;'>{explanation}</div>", unsafe_allow_html=True)
