@@ -15,9 +15,9 @@ CACHE_TTL = 3600  # Cache validity: 1 hour (seconds)
 MAX_PHOTOS = 3    # Maximum number of photos to fetch
 
 # 多角色风格提示词模板
-CURATOR_PROMPT_TEMPLATES = {
+DIRECTOR_PROMPT_TEMPLATES = {
     "general": """
-You are a senior curator with 30 years of experience in a world-class zoo, 
+You are a senior director with 30 years of experience in a world-class zoo, 
 skilled at explaining animal knowledge to general visitors in vivid, accessible language.
 Based on the following animal data, generate a complete, engaging explanation that includes:
 1. A warm opening greeting to attract attention (e.g., "Welcome to the XX exhibit, everyone!");
@@ -31,7 +31,7 @@ Animal Data:
 {animal_data}
 """,
     "kids": """
-You are a zoo curator specialized in educating children (ages 6-12), with a playful, energetic tone.
+You are a zoo director specialized in educating children (ages 6-12), with a playful, energetic tone.
 Based on the following animal data, generate a kid-friendly explanation that includes:
 1. A cheerful, exciting opening (e.g., "Hey little explorers! Let's meet the amazing XX!");
 2. Core content: Simple descriptions of appearance (cute/fun features), diet (favorite foods), 
@@ -44,7 +44,7 @@ Animal Data:
 {animal_data}
 """,
     "biologist": """
-You are a senior zoo curator with a background in wildlife biology, speaking to professional biologists/students.
+You are a senior zoo director with a background in wildlife biology, speaking to professional biologists/students.
 Based on the following animal data, generate a technical, detailed explanation that includes:
 1. A concise opening introducing the species' ecological significance;
 2. Core content: Complete taxonomic classification + detailed morphological characteristics + 
@@ -179,7 +179,7 @@ def fetch_gbif_data(species_name: str, region: str = "") -> Optional[Dict]:
             GBIF_API_BASE,
             params=params,
             timeout=15,
-            headers={"User-Agent": "AI-Zoo-Curator-App/1.0"}
+            headers={"User-Agent": "AI-Zoo-Director-App/1.0"}
         )
         response.raise_for_status()  # Trigger HTTP errors (4xx/5xx)
         data = response.json()
@@ -210,7 +210,7 @@ def fetch_inaturalist_data(species_name: str) -> Optional[Dict]:
             INATURALIST_API_BASE,
             params=params,
             timeout=15,
-            headers={"User-Agent": "AI-Zoo-Curator-App/1.0"}
+            headers={"User-Agent": "AI-Zoo-Director-App/1.0"}
         )
         response.raise_for_status()
         data = response.json()
@@ -281,9 +281,9 @@ def init_ai_client(api_key: str) -> Optional[OpenAI]:
         st.error(f"❌ Failed to initialize AI client: {str(e)}")
         return None
 
-def generate_curator_explanation(animal_data: Dict, api_key: str, selected_role: str) -> Optional[str]:
+def generate_director_explanation(animal_data: Dict, api_key: str, selected_role: str) -> Optional[str]:
     """
-    Generate zoo curator-style explanation via AI with selected role
+    Generate zoo director-style explanation via AI with selected role
     :param animal_data: Merged animal data
     :param api_key: OpenAI API Key
     :param selected_role: Selected explanation style (general/kids/biologist/tourist_guide)
@@ -298,7 +298,7 @@ def generate_curator_explanation(animal_data: Dict, api_key: str, selected_role:
         return None
 
     # Get corresponding prompt template based on selected role
-    prompt = CURATOR_PROMPT_TEMPLATES[selected_role].format(
+    prompt = DIRECTOR_PROMPT_TEMPLATES[selected_role].format(
         animal_data=json.dumps(animal_data, ensure_ascii=False, indent=2)
     )
 
@@ -325,18 +325,18 @@ def generate_curator_explanation(animal_data: Dict, api_key: str, selected_role:
 def main():
     # Page Basic Configuration
     st.set_page_config(
-        page_title="AI Zoo Curator",
+        page_title="AI Zoo Director",
         page_icon="🐘",
         layout="wide",
         initial_sidebar_state="expanded"
     )
 
     # Page Title & Introduction
-    st.title("🐅 AI Zoo Curator")
+    st.title("🐅 AI Zoo Director")
     st.subheader("—— Intelligent Science Explanations Based on Global Biodiversity Data", divider="orange")
     st.markdown("""
     🔍 Integrates GBIF global biodiversity data & iNaturalist citizen science records  
-    🎭 Multiple curator styles for different audiences (Kids / Biologists / Tourists)  
+    🎭 Multiple director styles for different audiences (Kids / Biologists / Tourists)  
     📸 Massive real photos, support search by name & region  
     🐼 Default display: Giant Panda (No API Key required!)
     """)
@@ -354,10 +354,10 @@ def main():
         )
         
         # 角色风格选择
-        st.header("🎭 Curator Style", divider="blue")
+        st.header("🎭 Director Style", divider="blue")
         selected_role = st.selectbox(
             "Select Audience Style",
-            options=list(CURATOR_PROMPT_TEMPLATES.keys()),
+            options=list(DIRECTOR_PROMPT_TEMPLATES.keys()),
             format_func=lambda x: x.replace("_", " ").title(),
             index=0  # 默认选择 general
         )
@@ -423,7 +423,7 @@ def main():
         # 右侧：大熊猫默认解说（根据选择的角色）
         with col2:
             role_display_name = selected_role.replace("_", " ").title()
-            st.subheader(f"🎤 Curator's Explanation (For {role_display_name})", divider="blue")
+            st.subheader(f"🎤 Director's Explanation (For {role_display_name})", divider="blue")
             st.markdown(f"<div style='font-size: 17px; line-height: 1.8;'>{GIANT_PANDA_DEFAULT_DATA['default_explanation'][selected_role]}</div>", unsafe_allow_html=True)
         
         # 热门动物推荐（默认展示大熊猫下方）
@@ -483,7 +483,7 @@ def process_animal_query(species_name: str, region: str, api_key: str, selected_
             if not api_key:
                 st.error("❌ API Key is required for non-panda animals. Please enter your OpenAI API Key in the sidebar.")
                 return
-            explanation = generate_curator_explanation(animal_data, api_key, selected_role)
+            explanation = generate_director_explanation(animal_data, api_key, selected_role)
             if not explanation:
                 return
 
@@ -528,7 +528,7 @@ def process_animal_query(species_name: str, region: str, api_key: str, selected_
         # 5. 右侧展示：AI 馆长解说
         with col2:
             role_display_name = selected_role.replace("_", " ").title()
-            st.subheader(f"🎤 Curator's Explanation (For {role_display_name})", divider="blue")
+            st.subheader(f"🎤 Director's Explanation (For {role_display_name})", divider="blue")
             
             if explanation:
                 st.markdown(f"<div style='font-size: 17px; line-height: 1.8;'>{explanation}</div>", unsafe_allow_html=True)
