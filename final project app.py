@@ -453,7 +453,7 @@ def main():
     st.divider()
     st.caption("""
     📊 Data Sources: GBIF API | iNaturalist API | Giant Panda default data (authoritative conservation records)  
-    🤖 AI Model: OpenAI GPT-3.5 Turbo (Supports Claude/Gemini replacement)  
+    🤖 AI Model: OpenAI gpt-4o-mini  
     """)
 
 def process_animal_query(species_name: str, region: str, api_key: str, selected_role: str, col1, col2):
