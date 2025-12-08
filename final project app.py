@@ -304,10 +304,10 @@ def generate_director_explanation(animal_data: Dict, api_key: str, selected_role
 
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7 if selected_role != "biologist" else 0.3,  # 科学家风格更严谨，降低随机性
-            max_tokens=1500 if selected_role == "biologist" else 1200,  # 科学家风格内容更详细，增加 tokens
+            max_tokens=800,
             timeout=20
         )
         return response.choices[0].message.content.strip()
